@@ -77,3 +77,27 @@ def format_event(event):
     if build_message is None:
         return f"{event['type']} en {repo}"
     return build_message(repo, event.get("payload", {}))
+
+
+# Agrupa los eventos consecutivos que generan el mismo mensaje
+def summarize(events):
+    groups = []
+    for event in events:
+        message = format_event(event)
+        if groups and groups[-1]["message"] == message:
+            groups[-1]["count"] += 1
+        else:
+            groups.append({"message": message, "event": event, "count": 1})
+
+    return [format_group(group) for group in groups]
+
+
+# Agrega la cantidad cuando hay más de un evento
+def format_group(group):
+    if group["count"] == 1:
+        return group["message"]
+
+    event = group["event"]
+    if event["type"] == "PushEvent":
+        return f"Hizo {group['count']} pushes a {event['repo']['name']}"
+    return f"{group['message']} ({group['count']} veces)"

@@ -23,8 +23,8 @@ def main(argv):
         return 0
 
     # Tipo de evento y repositorio
-    for event in events:
-        print(f"- {formatter.format_event(event)}")
+    for line in formatter.summarize(events):
+        print(f"- {line}")
 
     return 0
 
