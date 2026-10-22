@@ -1,6 +1,7 @@
 import sys
 
 import github_api
+import formatter
 
 USAGE = "Uso: python github_activity.py <usuario>"
 
@@ -23,7 +24,7 @@ def main(argv):
 
     # Tipo de evento y repositorio
     for event in events:
-        print(f"- {event['type']} en {event['repo']['name']}")
+        print(f"- {formatter.format_event(event)}")
 
     return 0
 
